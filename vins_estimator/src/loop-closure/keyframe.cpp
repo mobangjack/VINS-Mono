@@ -205,7 +205,9 @@ void KeyFrame::PnPRANSAC(vector<cv::Point2f> &measurements_old,
 
     cv::Mat inliers;
     TicToc t_pnp_ransac;
-    solvePnPRansac(pts_3_vector, measurements_old_norm, K, D, rvec, t, true, 100, 10.0 / 460.0, 100, inliers);
+    cout << "Test if solvePnPRansac throws exceptions in keyframe.cpp" << endl;
+    //solvePnPRansac(pts_3_vector, measurements_old_norm, K, D, rvec, t, true, 100, 10.0 / 460.0, 100, inliers); OpenCV3 VS OpenCV2
+    solvePnPRansac(pts_3_vector, measurements_old_norm, K, D, rvec, t, true, 100, 10.0 / 460.0, 0.99, inliers);
     ROS_DEBUG("t_pnp_ransac %f ms", t_pnp_ransac.toc());
 
     std::vector<uchar> status;

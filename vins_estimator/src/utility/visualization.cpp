@@ -40,7 +40,7 @@ void pubLatestOdometry(const Eigen::Vector3d &P, const Eigen::Quaterniond &Q, co
 
     nav_msgs::Odometry odometry;
     odometry.header = header;
-    odometry.header.frame_id = "world";
+    odometry.header.frame_id = "camera_link";
     odometry.pose.pose.position.x = P.x();
     odometry.pose.pose.position.y = P.y();
     odometry.pose.pose.position.z = P.z();
@@ -99,8 +99,8 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header, Eig
     {
         nav_msgs::Odometry odometry;
         odometry.header = header;
-        odometry.header.frame_id = "world";
-        odometry.child_frame_id = "world";
+        odometry.header.frame_id = "camera_link";
+        odometry.child_frame_id = "camera_link";
         odometry.pose.pose.position.x = estimator.Ps[WINDOW_SIZE].x();
         odometry.pose.pose.position.y = estimator.Ps[WINDOW_SIZE].y();
         odometry.pose.pose.position.z = estimator.Ps[WINDOW_SIZE].z();
@@ -111,10 +111,10 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header, Eig
         
         geometry_msgs::PoseStamped pose_stamped;
         pose_stamped.header = header;
-        pose_stamped.header.frame_id = "world";
+        pose_stamped.header.frame_id = "camera_link";
         pose_stamped.pose = odometry.pose.pose;
         path.header = header;
-        path.header.frame_id = "world";
+        path.header.frame_id = "camera_link";
         path.poses.push_back(pose_stamped);
         pub_path.publish(path);
 
@@ -138,7 +138,7 @@ void pubOdometry(const Estimator &estimator, const std_msgs::Header &header, Eig
 
         pose_stamped.pose = odometry.pose.pose;
         loop_path.header = header;
-        loop_path.header.frame_id = "world";
+        loop_path.header.frame_id = "camera_link";
         loop_path.poses.push_back(pose_stamped);
         pub_loop_path.publish(loop_path);
 
@@ -169,7 +169,7 @@ void pubKeyPoses(const Estimator &estimator, const std_msgs::Header &header, Eig
         return;
     visualization_msgs::Marker key_poses;
     key_poses.header = header;
-    key_poses.header.frame_id = "world";
+    key_poses.header.frame_id = "camera_link";
     key_poses.ns = "key_poses";
     key_poses.type = visualization_msgs::Marker::SPHERE_LIST;
     key_poses.action = visualization_msgs::Marker::ADD;
@@ -223,7 +223,7 @@ void pubCameraPose(const Estimator &estimator, const std_msgs::Header &header, E
 
         cameraposevisual.reset();
         cameraposevisual.add_pose(P, R);
-        camera_pose.header.frame_id = "world";
+        camera_pose.header.frame_id = "camera_link";
         cameraposevisual.publish_by(pub_camera_pose_visual, camera_pose.header);
     }
 }
@@ -323,7 +323,7 @@ void pubTF(const Estimator &estimator, const std_msgs::Header &header, Eigen::Ve
     q.setY(correct_q.y());
     q.setZ(correct_q.z());
     transform.setRotation(q);
-    br.sendTransform(tf::StampedTransform(transform, header.stamp, "world", "body"));
+    br.sendTransform(tf::StampedTransform(transform, header.stamp, "camera_link", "body"));
 
     // camera frame
     transform.setOrigin(tf::Vector3(estimator.tic[0].x(),

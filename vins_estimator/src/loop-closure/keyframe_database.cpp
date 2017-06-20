@@ -53,7 +53,7 @@ void KeyFrameDatabase::add(KeyFrame* pKF)
 	// add key frame to path for visualization
 	nav_msgs::Odometry odometry;
 	odometry.header.stamp = ros::Time(pKF->header);
-	odometry.header.frame_id = "world";
+	odometry.header.frame_id = "camera_link";
 	odometry.pose.pose.position.x = P.x();
 	odometry.pose.pose.position.y = P.y();
 	odometry.pose.pose.position.z = P.z();
@@ -387,7 +387,7 @@ void KeyFrameDatabase::updateVisualization()
 		// add key frame to path for visualization
 		nav_msgs::Odometry odometry;
 		odometry.header.stamp = ros::Time((*it)->header);
-		odometry.header.frame_id = "world";
+		odometry.header.frame_id = "camera_link";
 		odometry.pose.pose.position.x = P.x();
 		odometry.pose.pose.position.y = P.y();
 		odometry.pose.pose.position.z = P.z();

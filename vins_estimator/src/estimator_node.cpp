@@ -161,7 +161,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
         std::lock_guard<std::mutex> lg(m_state);
         predict(imu_msg);
         std_msgs::Header header = imu_msg->header;
-        header.frame_id = "world";
+        header.frame_id = "camera_link"; // "world"
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
             pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);
     }
@@ -548,7 +548,7 @@ void process()
             double whole_t = t_s.toc();
             printStatistics(estimator, whole_t);
             std_msgs::Header header = img_msg->header;
-            header.frame_id = "world";
+            header.frame_id = "camera_link"; // "world"
             cur_header = header;
             m_loop_drift.lock();
             if (estimator.relocalize)
